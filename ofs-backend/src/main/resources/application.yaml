@@ -18,4 +18,5 @@ spring:
 logging:
   level:
     root: WARN
-    org.hibernate.sql: DEBUG
+#    org.hibernate.SQL: DEBUG
+#    org.hibernate.type.descriptor.sql: TRACE

@@ -2,6 +2,7 @@ plugins {
     kotlin("jvm") version "1.9.0"
     kotlin("plugin.spring") version "1.9.0"
     kotlin("plugin.jpa") version "1.9.0"
+    kotlin("plugin.allopen") version "1.9.0"
     id("com.diffplug.spotless") version "6.19.0"
     id("org.springframework.boot") version "3.1.3"
     id("io.spring.dependency-management") version "1.1.3"
@@ -44,4 +45,8 @@ spotless {
     kotlin {
         ktlint("0.50.0")
     }
+}
+
+allOpen {
+    annotations("jakarta.persistence.Entity", "jakarta.persistence.MappedSuperclass")
 }
