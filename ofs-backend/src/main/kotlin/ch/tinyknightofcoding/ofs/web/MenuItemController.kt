@@ -7,6 +7,7 @@ import ch.tinyknightofcoding.ofs.model.MenuItem
 import ch.tinyknightofcoding.ofs.model.command.MenuItemCreateCommand
 import ch.tinyknightofcoding.ofs.orGenerate
 import ch.tinyknightofcoding.ofs.service.MenuItemService
+import ch.tinyknightofcoding.ofs.service.TransactionService
 import org.springframework.http.ResponseEntity
 import org.springframework.transaction.annotation.Transactional
 import org.springframework.web.bind.annotation.GetMapping
@@ -24,6 +25,7 @@ import java.util.UUID
 class MenuItemController(
     val service: MenuItemService,
     val repository: MenuItemRepository,
+    val transactionService: TransactionService,
 ) {
 
     @GetMapping
@@ -38,10 +40,11 @@ class MenuItemController(
         @RequestHeader(name = "OFS-Command-ID", required = false) commandId: UUID?,
         @RequestBody
         body: MenuItemCreateDto,
-    ): ResponseEntity<MenuItemDto> {
-        val cmd = MenuItemCreateCommand(commandId.orGenerate(), menuItemId, body.name, body.price)
-        val menuItem = service.create(cmd)
-        return ok(menuItem.toDto())
+    ): ResponseEntity<MenuItemDto> = transactionService.runInTransactionContext {
+        val command = MenuItemCreateCommand(commandId.orGenerate(), menuItemId, body.name, body.price)
+        val menuItem = service.create(command)
+        commandExecuted(command)
+        ok(menuItem.toDto())
     }
 }
 

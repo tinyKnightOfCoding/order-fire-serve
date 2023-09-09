@@ -13,6 +13,6 @@ interface TransactionRepository : JpaRepository<Transaction, UUID> {
     @Query("select max(t.id) from Transaction t")
     fun getHeadId(): UUID?
 
-    @Query("select t from Transaction  t where t.id > :previousId order by t.id")
+    @Query("select t from Transaction  t where t.id > :lastKnownId order by t.id")
     fun seek(lastKnownId: UUID, pageable: Pageable): List<Transaction>
 }
