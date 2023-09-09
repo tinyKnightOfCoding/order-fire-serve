@@ -1,0 +1,21 @@
+spring:
+  jackson:
+    default-property-inclusion: non_null
+  datasource:
+    driver-class-name: org.postgresql.Driver
+    url: jdbc:postgresql://localhost:5433/order
+    username: order
+    password: order
+  jpa:
+    open-in-view: false
+    hibernate:
+      ddl-auto: create-drop
+    properties:
+      hibernate:
+        format_sql: true
+  main:
+    banner-mode: off
+logging:
+  level:
+    root: WARN
+    org.hibernate.sql: DEBUG
