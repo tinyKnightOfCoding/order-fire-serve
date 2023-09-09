@@ -1,7 +1,8 @@
 package ch.tinyknightofcoding.ofs.model.transaction
 
+import ch.tinyknightofcoding.ofs.generateUuid
 import ch.tinyknightofcoding.ofs.model.command.Command
-import com.github.f4b6a3.uuid.UuidCreator
+import ch.tinyknightofcoding.ofs.orNil
 import jakarta.persistence.CascadeType
 import jakarta.persistence.Column
 import jakarta.persistence.Entity
@@ -28,8 +29,8 @@ class Transaction private constructor(
 ) {
 
     companion object {
-        fun create(previousId: UUID, commands: List<Command>): Transaction {
-            return Transaction(UuidCreator.getTimeOrderedEpoch(), previousId, commands)
+        fun create(previousId: UUID?, commands: List<Command>): Transaction {
+            return Transaction(generateUuid(), previousId.orNil(), commands)
         }
     }
 }
