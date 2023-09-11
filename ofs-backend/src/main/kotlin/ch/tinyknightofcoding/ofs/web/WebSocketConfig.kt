@@ -9,6 +9,6 @@ import org.springframework.web.socket.config.annotation.WebSocketHandlerRegistry
 @EnableWebSocket
 class WebSocketConfig(val handler: WebSocketTransactionHandler) : WebSocketConfigurer {
     override fun registerWebSocketHandlers(registry: WebSocketHandlerRegistry) {
-        registry.addHandler(handler, "/transactions/ws")
+        registry.addHandler(handler, "/transactions/ws").setAllowedOrigins("*")
     }
 }

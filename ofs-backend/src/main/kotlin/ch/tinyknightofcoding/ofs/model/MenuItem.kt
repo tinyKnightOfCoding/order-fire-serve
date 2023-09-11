@@ -10,7 +10,7 @@ import java.util.UUID
 class MenuItem(
     id: UUID,
     @Column(nullable = false)
-    val name: String,
+    var name: String,
     @Column(nullable = false)
-    val price: BigDecimal,
+    var price: BigDecimal,
 ) : BaseModel(id)

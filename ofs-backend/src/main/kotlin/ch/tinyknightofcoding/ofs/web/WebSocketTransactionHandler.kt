@@ -24,6 +24,10 @@ class WebSocketTransactionHandler(val mapper: ObjectMapper) : TextWebSocketHandl
         activeSessions.remove(session)
     }
 
+    override fun handleTransportError(session: WebSocketSession, exception: Throwable) {
+        log.warn("transport error", exception)
+    }
+
     override fun afterCommit(transaction: Transaction) {
         val payload = mapper.writeValueAsString(transaction.toDto())
         val msg = TextMessage(payload)

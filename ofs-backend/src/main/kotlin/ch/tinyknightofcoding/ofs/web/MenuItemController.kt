@@ -3,14 +3,19 @@ package ch.tinyknightofcoding.ofs.web
 import ch.tinyknightofcoding.ofs.MenuItemRepository
 import ch.tinyknightofcoding.ofs.dto.menu_item.MenuItemCreateDto
 import ch.tinyknightofcoding.ofs.dto.menu_item.MenuItemDto
+import ch.tinyknightofcoding.ofs.dto.menu_item.MenuItemPatchDto
 import ch.tinyknightofcoding.ofs.model.MenuItem
 import ch.tinyknightofcoding.ofs.model.command.MenuItemCreateCommand
+import ch.tinyknightofcoding.ofs.model.command.MenuItemDeleteCommand
+import ch.tinyknightofcoding.ofs.model.command.MenuItemPatchCommand
 import ch.tinyknightofcoding.ofs.orGenerate
 import ch.tinyknightofcoding.ofs.service.MenuItemService
 import ch.tinyknightofcoding.ofs.service.TransactionService
 import org.springframework.http.ResponseEntity
 import org.springframework.transaction.annotation.Transactional
+import org.springframework.web.bind.annotation.DeleteMapping
 import org.springframework.web.bind.annotation.GetMapping
+import org.springframework.web.bind.annotation.PatchMapping
 import org.springframework.web.bind.annotation.PathVariable
 import org.springframework.web.bind.annotation.PutMapping
 import org.springframework.web.bind.annotation.RequestBody
@@ -45,6 +50,36 @@ class MenuItemController(
         val menuItem = service.create(command)
         commandExecuted(command)
         ok(menuItem.toDto())
+    }
+
+    @PatchMapping("/{menuItemId}")
+    fun patch(
+        @PathVariable menuItemId: UUID,
+        @RequestHeader(name = "OFS-Command-ID", required = false) commandId: UUID?,
+        @RequestBody body: MenuItemPatchDto,
+    ): ResponseEntity<MenuItemDto> = transactionService.runInTransactionContext {
+        val command = MenuItemPatchCommand(
+            commandId.orGenerate(),
+            menuItemId,
+            body.name != null,
+            body.name,
+            body.price != null,
+            body.price,
+        )
+        val menuItem = service.patch(command)
+        commandExecuted(command)
+        ok(menuItem.toDto())
+    }
+
+    @DeleteMapping("/{menuItemId}")
+    fun delete(
+        @PathVariable menuItemId: UUID,
+        @RequestHeader(name = "OFS-Command-ID", required = false) commandId: UUID?,
+    ): ResponseEntity<Unit> = transactionService.runInTransactionContext {
+        val command = MenuItemDeleteCommand(commandId.orGenerate(), menuItemId)
+        service.delete(command)
+        commandExecuted(command)
+        noContent()
     }
 }
 
