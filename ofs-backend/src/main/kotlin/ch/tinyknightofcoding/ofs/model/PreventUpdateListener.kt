@@ -8,7 +8,6 @@ class PreventUpdateListener {
 
     @PrePersist
     fun onPrePersist(entity: Any) {
-        println(entity)
     }
 
     @PreUpdate

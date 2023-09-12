@@ -1,0 +1,19 @@
+@import "../node_modules/modern-normalize/modern-normalize.css";
+@import "_reset.css";
+@import url('https://fonts.googleapis.com/css?family=Source+Sans+3');
+
+body {
+    font-family: 'Source Sans 3', sans-serif;
+}
+
+.muted-input {
+    border-color: transparent;
+}
+
+.muted-input:hover {
+    border-color: lightgrey;
+}
+
+.muted-input:focus {
+    border-color: darkgrey;
+}
