@@ -16,6 +16,7 @@ class TransactionService(
 ) {
 
     fun <R> runInTransactionContext(run: context(TransactionContext) () -> R): R {
+        repository.acquireLock()
         val previousId = repository.getHeadId()
         val ctx = TransactionContext(generateUuid(), previousId)
         val result = run(ctx)
