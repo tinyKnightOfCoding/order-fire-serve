@@ -2,7 +2,7 @@
 
 This is a simple proof of concept inspired by the Linear App Architecture (See)[https://www.youtube.com/live/WxK11RsLqp4?feature=share&t=2175].
 
-## Backend
+## Backend
 The backend provides a simple REST Api that uses event sourcing to record all mutations.
 
 Here are a few guidelines:
