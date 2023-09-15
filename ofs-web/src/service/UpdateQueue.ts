@@ -1,5 +1,6 @@
 import {Command} from '../model/Command.ts';
 import {IJsonPatch} from 'mobx-state-tree';
+import {localStore} from './LocalStore.ts';
 
 export class UpdateQueue {
 
@@ -28,8 +29,8 @@ export class UpdateQueue {
         const command = this.commands.shift()
         if(command === undefined) return
         command.execute().then(() => setTimeout(() => this.resolveTop()), (err) => {
-            console.log(err)
-            // TODO revoke
+            console.log('err', err)
+            localStore.revokeLocal(command)
             setTimeout(() => this.resolveTop())
         })
     }

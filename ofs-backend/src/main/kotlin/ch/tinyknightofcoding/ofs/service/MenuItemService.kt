@@ -21,6 +21,7 @@ class MenuItemService(val menuItemRepository: MenuItemRepository) {
     }
 
     fun patch(command: MenuItemPatchCommand): MenuItem {
+        if ("Spaghetti Carbonara mit Rahm".equals(command.name, ignoreCase = true)) throw IllegalStateException()
         val menuItem = menuItemRepository.findByIdOrNull(command.targetId) ?: throw IllegalStateException()
         if (command.nameChanged) {
             menuItem.name = command.name!!

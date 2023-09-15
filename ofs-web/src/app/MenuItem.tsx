@@ -4,12 +4,15 @@ type MenuItemsProps = {
     item: MenuItemInstance
 }
 
+function useDerivedState<T>(state: T) {
+    const [name, setName] = useState(state)
+    useEffect(() => setName(state), [state])
+    return [name, setName] as const
+}
+
 const MenuItem = observer(({item}: MenuItemsProps) => {
-    console.log(item, item.name, item.price)
-    const [name, setName] = useState(item.name)
-    useEffect(() => setName(item.name), [item.name])
-    const [price, setPrice] = useState(item.price)
-    useEffect(() => setPrice(item.price), [item.price])
+    const [price, setPrice] = useDerivedState(item.price)
+    const [name, setName] = useDerivedState(item.name)
 
     function deleteItem() {
         localStore.applyLocal(MenuItemDeleteCommand.create(item))
@@ -41,6 +44,6 @@ import {MenuItemInstance} from '../model/Model.ts';
 import {localStore} from '../service/LocalStore.ts';
 import {MenuItemDeleteCommand, MenuItemPatchCommand} from '../model/Command.ts';
 import {useDebouncedCallback} from 'use-debounce';
-import {observer} from 'mobx-react';
+import {observer, useLocalObservable, useObserver} from 'mobx-react';
 
 export default MenuItem

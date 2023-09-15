@@ -41,7 +41,6 @@ export class TransactionListener {
         const commands = transaction.commands.map(dto => deserializeCommand(dto))
         commands.forEach(command => command.apply())
         snapshotRepository.setTransactionId(transaction.id)
-        // TODO clear updatequeue just to be save?
         localStore.applyRemote(commands)
     }
 }

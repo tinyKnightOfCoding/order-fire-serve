@@ -19,7 +19,7 @@ export interface Command {
     readonly patches: IJsonPatch[];
 
     // calls backend
-    execute(): Promise<void>;
+    execute(): Promise<unknown>;
 
     // updates snapshot repository
     apply(): void
@@ -65,8 +65,8 @@ export class MenuItemCreateCommand implements Command {
     ) {
     }
 
-    execute(): Promise<void> {
-        return putMenuItem({name: this.name, price: this.price}, this.targetId, this.id).then()
+    execute(): Promise<unknown> {
+        return putMenuItem({name: this.name, price: this.price}, this.targetId, this.id)
     }
 
     apply() {
@@ -118,8 +118,8 @@ export class MenuItemPatchCommand implements Command {
     ) {
     }
 
-    execute(): Promise<void> {
-        return patchMenuItem({name: this.name, price: this.price}, this.targetId, this.id).then()
+    execute(): Promise<unknown> {
+        return patchMenuItem({name: this.name, price: this.price}, this.targetId, this.id)
     }
 
     apply() {
@@ -159,8 +159,8 @@ export class MenuItemDeleteCommand implements Command {
     ) {
     }
 
-    execute(): Promise<void> {
-        return deleteMenuItem(this.targetId, this.id).then()
+    execute(): Promise<unknown> {
+        return deleteMenuItem(this.targetId, this.id)
     }
 
     apply() {

@@ -68,7 +68,14 @@ export function patchMenuItem(body: MenuItemPatchDto, menuItemId: string, comman
             'Content-Type': 'application/json',
         },
         body: JSON.stringify(body)
-    }).then(res => res.json())
+    }).then(res => {
+        if(res.status >= 400) return Promise.reject("Failed")
+        return res
+    })
+        .then(res => {
+        console.log(res)
+        return res.json()
+    })
 }
 
 export function deleteMenuItem(menuItemId: string, commandId: string): Promise<MenuItemDto> {

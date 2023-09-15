@@ -1,8 +1,9 @@
 import {RestaurantState, RestaurantStateInstance} from '../model/Model.ts';
 import {Command} from '../model/Command.ts';
-import {applyPatch} from 'mobx-state-tree';
+import {applyPatch, IJsonPatch} from 'mobx-state-tree';
 import {updateQueue} from './UpdateQueue.ts';
 import React, {useContext} from 'react';
+import {snapshotRepository} from './SnapshotRepository.ts';
 
 export class LocalStore {
 
@@ -28,6 +29,16 @@ export class LocalStore {
     applyLocal(command: Command) {
         updateQueue.queue(command)
         applyPatch(this.state, command.patches)
+    }
+
+    revokeLocal(command: Command) {
+        const menuItemRemoteSnapshot = snapshotRepository.getMenuItem(command.targetId)
+        const resetPatch: IJsonPatch = menuItemRemoteSnapshot !== null ? {
+            op: "add",
+            path: command.entityPath,
+            value: menuItemRemoteSnapshot
+        } : { op: "remove", path: command.entityPath}
+        applyPatch(this.state, [resetPatch, ...updateQueue.patches])
     }
 }
 

@@ -1,5 +1,5 @@
 import {localStore} from './LocalStore.ts';
-import {applyPatch, applySnapshot, onSnapshot} from 'mobx-state-tree';
+import {applyPatch, applySnapshot} from 'mobx-state-tree';
 import {snapshotRepository} from './SnapshotRepository.ts';
 import {seekTransactions} from '../api/Client.ts';
 import {transactionListener} from './TransactionListener.ts';
@@ -15,6 +15,5 @@ export async function startUp() {
         transactions = await seekTransactions(snapshotRepository.getTransactionId())
     }
     applyPatch(localStore.state, updateQueue.patches)
-    onSnapshot(localStore.state, console.log)
     transactionListener.start()
 }
